@@ -31,7 +31,7 @@ func (m *model) resize() {
 		m.tableModel.initModel(tableWidth, tableHeight)
 	case newInputMode:
 		m.tableModel.initModel(tableWidth, tableHeight-3)
-		m.newInputModel.initModel(tableWidth, 0)
+		m.newInputModel.initModel(screenWidth-5, 0)
 	}
 }
 

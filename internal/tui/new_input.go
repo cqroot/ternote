@@ -17,7 +17,7 @@ func (m *newInputModel) initModel(width, height int) {
 	m.textinput = textinput.New()
 	m.textinput.Focus()
 	m.textinput.CharLimit = 156
-	m.textinput.Width = width - 5
+	m.textinput.Width = width
 }
 
 func (m newInputModel) Init() tea.Cmd { return nil }
