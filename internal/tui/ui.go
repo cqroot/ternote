@@ -21,23 +21,35 @@ type model struct {
 	quitting bool
 }
 
-func (m model) Init() tea.Cmd {
-	m.mode = normalMode
-	m.quitting = false
-	return nil
-}
-
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	var cmd tea.Cmd
+func (m *model) resize() {
 	screenWidth, screenHeight, _ := term.GetSize(int(os.Stdout.Fd()))
 	tableWidth := screenWidth - 1
 	tableHeight := screenHeight - 5
 
 	switch m.mode {
 	case normalMode:
+		m.tableModel.initModel(tableWidth, tableHeight)
+	case newInputMode:
+		m.tableModel.initModel(tableWidth, tableHeight-3)
+		m.newInputModel.initModel(tableWidth, 0)
+	}
+}
+
+func (m model) Init() tea.Cmd {
+	m.mode = normalMode
+	m.quitting = false
+
+	return nil
+}
+
+func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	var cmd tea.Cmd
+
+	switch m.mode {
+	case normalMode:
 		switch msg := msg.(type) {
 		case tea.WindowSizeMsg:
-			m.tableModel.initModel(tableWidth, tableHeight)
+			m.resize()
 
 		case editorFinishedMsg:
 			m.quitting = false
@@ -46,7 +58,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, tea.Quit
 			}
 
-			m.tableModel.initModel(tableWidth, tableHeight)
+			m.resize()
 			return m, nil
 
 		default:
@@ -63,20 +75,25 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 			case newInputMsg:
 				m.mode = newInputMode
-				m.tableModel.initModel(tableWidth, tableHeight-3)
-				m.newInputModel.initModel()
+				m.resize()
 			}
 		}
 
 	case newInputMode:
-		var mm tea.Model
-		mm, cmd = m.newInputModel.Update(msg)
-		m.newInputModel, _ = mm.(newInputModel)
+		switch msg := msg.(type) {
+		case tea.WindowSizeMsg:
+			m.resize()
 
-		switch m.newInputModel.WidgetMsg {
-		case quitMsg:
-			m.mode = normalMode
-			m.tableModel.initModel(screenWidth-1, screenHeight-5)
+		default:
+			var mm tea.Model
+			mm, cmd = m.newInputModel.Update(msg)
+			m.newInputModel, _ = mm.(newInputModel)
+
+			switch m.newInputModel.WidgetMsg {
+			case quitMsg:
+				m.mode = normalMode
+				m.resize()
+			}
 		}
 	}
 

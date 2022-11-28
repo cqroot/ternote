@@ -1,11 +1,8 @@
 package tui
 
 import (
-	"os"
-
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
-	"golang.org/x/term"
 
 	"github.com/cqroot/ternote/pkg/ternote"
 )
@@ -16,13 +13,11 @@ type newInputModel struct {
 	WidgetMsg widgetMsg
 }
 
-func (m *newInputModel) initModel() {
-	screenWidth, _, _ := term.GetSize(int(os.Stdout.Fd()))
-
+func (m *newInputModel) initModel(width, height int) {
 	m.textinput = textinput.New()
 	m.textinput.Focus()
 	m.textinput.CharLimit = 156
-	m.textinput.Width = screenWidth - 5
+	m.textinput.Width = width - 5
 }
 
 func (m newInputModel) Init() tea.Cmd { return nil }
@@ -33,9 +28,6 @@ func (m newInputModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 
 	switch msg := msg.(type) {
-	case tea.WindowSizeMsg:
-		m.initModel()
-
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "esc", "ctrl+c":
