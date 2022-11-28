@@ -9,6 +9,7 @@ require (
 	github.com/charmbracelet/lipgloss v0.6.0
 	github.com/spf13/cobra v1.6.1
 	golang.org/x/term v0.2.0
+	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/sqlite v1.4.3
 	gorm.io/gorm v1.24.2
 )
