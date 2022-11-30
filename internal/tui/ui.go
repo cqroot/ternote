@@ -10,7 +10,10 @@ import (
 
 var baseStyle = lipgloss.NewStyle().
 	BorderStyle(lipgloss.RoundedBorder()).
-	BorderForeground(lipgloss.Color("240"))
+	BorderForeground(lipgloss.Color("8"))
+var focusStyle = lipgloss.NewStyle().
+	BorderStyle(lipgloss.RoundedBorder()).
+	BorderForeground(lipgloss.Color("7"))
 
 type model struct {
 	tableModel    tableModel
@@ -108,12 +111,12 @@ func (m model) View() string {
 	if !m.quitting {
 		switch m.mode {
 		case normalMode:
-			return baseStyle.Render(m.tableModel.View())
+			return focusStyle.Render(m.tableModel.View())
 		case newInputMode:
 			return lipgloss.JoinVertical(
 				lipgloss.Top,
 				baseStyle.Render(m.tableModel.View()),
-				baseStyle.Render(m.newInputModel.View()),
+				focusStyle.Render(m.newInputModel.View()),
 			)
 		}
 	}
