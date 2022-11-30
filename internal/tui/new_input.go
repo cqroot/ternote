@@ -3,6 +3,7 @@ package tui
 import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 
 	"github.com/cqroot/ternote/pkg/ternote"
 )
@@ -18,6 +19,9 @@ func (m *newInputModel) initModel(width, height int) {
 	m.textinput.Focus()
 	m.textinput.CharLimit = 156
 	m.textinput.Width = width
+	m.textinput.Prompt = " Category: "
+	m.textinput.PromptStyle = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("10"))
 }
 
 func (m newInputModel) Init() tea.Cmd { return nil }
