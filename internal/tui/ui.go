@@ -5,15 +5,20 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/cqroot/ternote/pkg/ternote"
 	"golang.org/x/term"
 )
 
-var baseStyle = lipgloss.NewStyle().
-	BorderStyle(lipgloss.RoundedBorder()).
-	BorderForeground(lipgloss.Color("8"))
-var focusStyle = lipgloss.NewStyle().
-	BorderStyle(lipgloss.RoundedBorder()).
-	BorderForeground(lipgloss.Color("7"))
+var (
+	tn *ternote.Ternote
+
+	baseStyle = lipgloss.NewStyle().
+			BorderStyle(lipgloss.RoundedBorder()).
+			BorderForeground(lipgloss.Color("8"))
+	focusStyle = lipgloss.NewStyle().
+			BorderStyle(lipgloss.RoundedBorder()).
+			BorderForeground(lipgloss.Color("7"))
+)
 
 type model struct {
 	tableModel    tableModel
@@ -125,6 +130,8 @@ func (m model) View() string {
 }
 
 func Run() error {
+	tn = ternote.New()
+
 	p := tea.NewProgram(model{}, tea.WithAltScreen())
 	_, err := p.Run()
 	if err != nil {

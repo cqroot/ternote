@@ -11,7 +11,6 @@ import (
 	"github.com/charmbracelet/lipgloss"
 
 	"github.com/cqroot/ternote/pkg/config"
-	"github.com/cqroot/ternote/pkg/ternote"
 	"github.com/cqroot/ternote/pkg/types"
 )
 
@@ -35,8 +34,8 @@ func (m *tableModel) initModel(width, height int) {
 	}
 	var rows []table.Row
 
-	for index, note := range ternote.Notes() {
-		err := ternote.UpdateNoteMetadata(&note)
+	for index, note := range tn.Notes() {
+		err := tn.UpdateNoteMetadata(&note)
 		if errors.Is(err, types.ErrorNoteFileNoteFound) {
 			continue
 		} else if err != nil {
@@ -93,7 +92,7 @@ func (m tableModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, editNote(m.table.SelectedRow()[1])
 
 		case "d":
-			ternote.RemoveNote(m.table.SelectedRow()[1])
+			tn.RemoveNote(m.table.SelectedRow()[1])
 			m.refreshModel()
 			return m, cmd
 

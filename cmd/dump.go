@@ -26,7 +26,7 @@ func init() {
 }
 
 func RunDumpCmd(cmd *cobra.Command, args []string) {
-	notes := ternote.Notes()
+	notes := ternote.New().Notes()
 
 	switch format {
 	case "markdown":

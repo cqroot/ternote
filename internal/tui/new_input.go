@@ -4,8 +4,6 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-
-	"github.com/cqroot/ternote/pkg/ternote"
 )
 
 type newInputModel struct {
@@ -39,7 +37,7 @@ func (m newInputModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, cmd
 		case "enter":
 			m.WidgetMsg = quitMsg
-			ternote.NewNote(m.textinput.Value())
+			tn.NewNote(m.textinput.Value())
 			return m, cmd
 		}
 	}

@@ -14,11 +14,18 @@ import (
 	"github.com/cqroot/ternote/pkg/types"
 )
 
-func Notes() []types.Note {
+type Ternote struct {
+}
+
+func New() *Ternote {
+	return &Ternote{}
+}
+
+func (t Ternote) Notes() []types.Note {
 	return metadata.Notes()
 }
 
-func UpdateNoteMetadata(note *types.Note) error {
+func (t Ternote) UpdateNoteMetadata(note *types.Note) error {
 	notePath, err := config.NotePath(note.Id)
 	if err != nil {
 		return err
@@ -60,7 +67,7 @@ func UpdateNoteMetadata(note *types.Note) error {
 	return nil
 }
 
-func NewNote(category string) error {
+func (t Ternote) NewNote(category string) error {
 	id := time.Now().Format("20060102150405")
 	notePath, err := config.NotePath(id)
 	if err != nil {
@@ -80,17 +87,19 @@ func NewNote(category string) error {
 		return err
 	}
 
-	metadata.Update(&types.Note{
+	note := types.Note{
 		Id:       id,
 		Category: category,
 		Title:    "",
 		ModTime:  fi.ModTime(),
-	})
+	}
+
+	metadata.Update(&note)
 
 	return nil
 }
 
-func RemoveNote(id string) error {
+func (t Ternote) RemoveNote(id string) error {
 	basePath, err := config.BasePath()
 	if err != nil {
 		return nil
